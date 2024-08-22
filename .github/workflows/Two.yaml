@@ -1,0 +1,27 @@
+name: Two
+
+on:
+  - push
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build
+        run: |
+          mkdir -p out
+          echo "Hello world two!" > out/index.html
+      - uses: actions/checkout@v4
+        with:
+          path: pages
+      - run: |
+          cd pages
+          git checkout pages
+          rm -rf two
+          cp -r ../out two
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "generated"
+          git pull --rebase
+          git push -u origin pages
